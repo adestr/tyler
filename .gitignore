@@ -1,0 +1,44 @@
+# Build directories
+build/
+cmake-build-*/
+out/
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+compile_commands.json
+CTestTestfile.cmake
+install_manifest.txt
+Makefile
+*_autogen/
+
+# Pico / embedded outputs (outside build/)
+*.elf
+*.bin
+*.hex
+*.uf2
+*.dis
+*.map
+*.o
+*.a
+*.d
+
+# IDE / editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.clangd/
+.cache/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Python (SDK / tooling helpers)
+__pycache__/
+*.pyc
+.venv/
+venv/
