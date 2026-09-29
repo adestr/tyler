@@ -2,30 +2,39 @@
 #include "pico/stdlib.h"
 #include "tyler.hpp"
 
-#ifndef LED_DELAY_MS
-#define LED_DELAY_MS 250
-#endif
+using namespace plasma;
+using namespace servo;
 
-int led_init(void) {
-#ifdef PICO_DEFAULT_LED_PIN
-    gpio_init(PICO_DEFAULT_LED_PIN);
-    gpio_set_dir(PICO_DEFAULT_LED_PIN, true);
-    return 0;
-#else
-    return -1;
-#endif
-}
+const uint SPEED = 5;
+
+constexpr float BRIGHTNESS = 0.4f;
+
+const uint UPDATES = 50;
+
+WS2812 led_bar(servo2040::NUM_LEDS, pio1, 0, servo2040::LED_DATA);
+
+Button user_sw(servo2040::USER_SW);
 
 int main() {
     stdio_init_all();
-    printf("Hello, world!\n");
-    if (led_init() == 0) {
-        while (true) {
-            gpio_put(PICO_DEFAULT_LED_PIN, 1);
-            sleep_ms(LED_DELAY_MS);
-            gpio_put(PICO_DEFAULT_LED_PIN, 0);
-            sleep_ms(LED_DELAY_MS);
+
+    led_bar.start();
+
+    float offset = 0.0f;
+    float increment = (float)SPEED / 1000.0f;
+
+    while (!user_sw.raw()) {
+        offset += increment;
+
+        for (auto i = 0u; i < servo2040::NUM_LEDS; ++i) {
+            float hue = fmodf(offset + (float)i / (float)servo2040::NUM_LEDS, 1.0f);
+            led_bar.set_hsv(i, hue, 1.0f, BRIGHTNESS);
         }
+
+        sleep_ms(1000 / UPDATES);
     }
-    return 0;
+
+    led_bar.clear();
+
+    sleep_ms(100);
 }
