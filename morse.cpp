@@ -1,13 +1,18 @@
 #include "morse.hpp"
 
 #include <cctype>
-#include <unordered_map>
 
 #include "pico/stdlib.h"
 
 namespace {
 
-const std::unordered_map<char, std::string_view> kMorseMap = {
+struct MorseEntry {
+	char symbol;
+	std::string_view code;
+};
+
+// Heap-free Morse table kept in static storage (.rodata).
+constexpr MorseEntry kMorseTable[] = {
 	{'A', ".-"},   {'B', "-..."}, {'C', "-.-."}, {'D', "-.."},  {'E', "."},
 	{'F', "..-."}, {'G', "--."},  {'H', "...."}, {'I', ".."},   {'J', ".---"},
 	{'K', "-.-"},  {'L', ".-.."}, {'M', "--"},   {'N', "-."},   {'O', "---"},
@@ -21,6 +26,15 @@ const std::unordered_map<char, std::string_view> kMorseMap = {
 	{'@', ".--.-."}, {':', "---..."}, {';', "-.-.-."}, {'=', "-...-"},
 	{'+', ".-.-."},  {'_', "..--.-"}, {'\'', ".----."}, {'"', ".-..-."},
 	{'$', "...-..-"}};
+
+constexpr std::string_view lookup(char symbol) {
+	for (const MorseEntry &entry : kMorseTable) {
+		if (entry.symbol == symbol) {
+			return entry.code;
+		}
+	}
+	return {};
+}
 
 } // namespace
 
@@ -38,8 +52,8 @@ std::string encode(std::string_view text) {
 		}
 
 		const char upper = static_cast<char>(std::toupper(static_cast<unsigned char>(ch)));
-		const auto it = kMorseMap.find(upper);
-		if (it == kMorseMap.end()) {
+		const std::string_view code = lookup(upper);
+		if (code.empty()) {
 			continue;
 		}
 
@@ -47,7 +61,7 @@ std::string encode(std::string_view text) {
 			output += pending_word_gap ? "   " : " ";
 		}
 
-		output += it->second;
+		output += code;
 		first_token = false;
 		pending_word_gap = false;
 	}
