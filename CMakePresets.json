@@ -1,0 +1,26 @@
+{
+  "version": 6,
+  "configurePresets": [
+    {
+      "name": "pico-servo2040",
+      "displayName": "Pico Servo2040",
+      "generator": "Unix Makefiles",
+      "binaryDir": "${sourceDir}/build",
+      "environment": {
+        "PICO_SDK_PATH": "/home/ade/src/rpi/pico-sdk"
+      },
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+        "PICO_BOARD": "pimoroni_servo2040",
+        "PICO_SDK_PATH": "/home/ade/src/rpi/pico-sdk"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "pico-servo2040",
+      "configurePreset": "pico-servo2040"
+    }
+  ]
+}
