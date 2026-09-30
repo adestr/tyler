@@ -37,7 +37,7 @@ int main() {
 
     led_bar.start();
 
-    morse::transmit("EVENLODE TECHNOLOGY", on, off, 25);
+    morse::transmit("EVENLODE TECHNOLOGY", on, off, 5);
 
     float offset = 0.0f;
     float increment = (float)SPEED / 1000.0f;
