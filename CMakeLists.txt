@@ -16,7 +16,7 @@ add_subdirectory(libraries)
 
 add_executable(tyler
     tyler.cpp
-  morse.cpp
+    morse.cpp
 )
 
 target_link_libraries(tyler pico_stdlib servo2040 button)
