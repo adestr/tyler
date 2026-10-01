@@ -17,8 +17,10 @@ Button user_sw(board::USER_SW);
 /**
  * Turns all LEDs on with a green color.
  */
-void on() {
-    for (auto i = 0u; i < board::NUM_LEDS; ++i) {
+void on()
+{
+    for (auto i = 0u; i < board::NUM_LEDS; ++i)
+    {
         led_bar.set_hsv(i, 0.333f, 1.0f, BRIGHTNESS);
     }
 }
@@ -26,11 +28,13 @@ void on() {
 /**
  * Turns all LEDs off.
  */
-void off() {
+void off()
+{
     led_bar.clear();
 }
 
-int main() {
+int main()
+{
     stdio_init_all();
 
     led_bar.start();
@@ -40,10 +44,12 @@ int main() {
     float offset = 0.0f;
     float increment = (float)SPEED / 1000.0f;
 
-    while (!user_sw.raw()) {
+    while (!user_sw.raw())
+    {
         offset += increment;
 
-        for (auto i = 0u; i < board::NUM_LEDS; ++i) {
+        for (auto i = 0u; i < board::NUM_LEDS; ++i)
+        {
             float hue = fmodf(offset + (float)i / (float)board::NUM_LEDS, 1.0f);
             led_bar.set_hsv(i, hue, 1.0f, BRIGHTNESS);
         }
@@ -52,6 +58,10 @@ int main() {
     }
 
     led_bar.clear();
+
+    sleep_ms(100);
+
+    servo_control::start();
 
     sleep_ms(100);
 }
